@@ -1,5 +1,5 @@
-alert('Hello world');
-
-// Define a variable favoriteFood and display it on the document
-let favoriteFood = "Pasta";
-document.write(favoriteFood);
+let pokemonList = [
+    { name: 'Bulbasaur', height: 0.7, types: ['grass', 'poison']},
+    { name: 'Charmander', height: 0.6, types: ['fire']},
+    { name: 'Squirtle', height: 0.5, types: ['water']},
+];
