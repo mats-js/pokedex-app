@@ -1,0 +1,34 @@
+:root {
+    /* colors */
+    --background-color: #fff;
+    --primary-color: #21b7a1;
+    --header-background-color1: yellow;
+    --header-background-color2: orange;
+
+    /* other properties */
+    --font-weight-h: 700;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--background-color);
+    font-family: Lato, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 30px;
+    font-weight: var(--font-weight-h);
+    margin: 0;
+    padding-left: 10px;
+}
+
+.page-header {
+    background: linear-gradient(90deg, var(--header-background-color1), var(--header-background-color2));
+}
