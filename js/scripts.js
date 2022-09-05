@@ -14,13 +14,28 @@ let pokemonRepository = (function() {
 
     // define separate function add(item)
     function add(item) {
-        pokemonList.push(item);
+        // check if the item to add is of the type 'object' (Bonus Task)
+        if (typeof item !== 'object') {
+            alert('New pokemon must be entered as an object');
+        // check if item keys are equal to the specific keys expected (Bonus Task)
+        } else if (Object.keys(item) !== ['name', 'height', 'types']) {
+            alert('New pokemon must be entered with item keys name, height, and types');
+        // else, add item to pokemonList
+        } else {
+            pokemonList.push(item);
+        }
     }
 
+    // define separate function findPokemon() (Bonus Task)
+    function findPokemon(pokemonName) {
+        return pokemonList.filter(list => list.name === pokemonName);
+    }
+ 
     // return object with the new public functions assigned as keys
     return {
         getAll: getAll,
-        add: add
+        add: add,
+        findPokemon: findPokemon
     }
 })()
 
