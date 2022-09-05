@@ -8,12 +8,12 @@ let pokemonList = [
 // define threshold for pokemon height (specifically chosen so that only one pokemon reaches the threshold)
 let heightBig = 0.7;
 
-// for loop to iterate over each item in pokemonList
-for (i = 0; i < pokemonList.length; i++) {
+// forEach loop to iterate over each pokemon in pokemonList
+pokemonList.forEach( function(pokemon) {
     // if height of pokemon is equal to or greater than the height threshold, label pokemon as 'Wow, that's big'
-    if (pokemonList[i].height >= heightBig) {
-        document.write(`<li>${pokemonList[i].name} (height: ${pokemonList[i].height}m) - Wow, that's big!</li>`);
+    if (pokemon.height >= heightBig) {
+        document.write(`<li>${pokemon.name} (height: ${pokemon.height}m) - Wow, that's big!</li>`);
     } else {
-        document.write(`<li>${pokemonList[i].name} (height: ${pokemonList[i].height}m)</li>`);
+        document.write(`<li>${pokemon.name} (height: ${pokemon.height}m)</li>`);
     }
-}
+});
