@@ -14,11 +14,11 @@ let pokemonRepository = (function() {
 
     // define separate function add(item)
     function add(item) {
-        // check if the item to add is of the type 'object' (Bonus Task)
+        // check if the item to add is of the type 'object'
         if (typeof item !== 'object') {
             alert('New pokemon must be entered as an object');
-        // check if item keys are equal to the specific keys expected (Bonus Task)
-        } else if (Object.keys(item) !== ['name', 'height', 'types']) {
+        // check if item keys are equal to the specific keys expected
+        } else if (!('name' in item) || !('height' in item) || !('types' in item)) {
             alert('New pokemon must be entered with item keys name, height, and types');
         // else, add item to pokemonList
         } else {
@@ -26,28 +26,40 @@ let pokemonRepository = (function() {
         }
     }
 
-    // define separate function findPokemon() (Bonus Task)
-    function findPokemon(pokemonName) {
-        return pokemonList.filter(list => list.name === pokemonName);
+    // define separate function addListItem()
+    function addListItem(pokemon) {
+        // assign the overall list of pokemon to a new variable
+        let listContainer = document.querySelector('.pokemon-list');
+        // create a new list entry and button for the pokemon
+        let listItem = document.createElement('li');
+        let button = document.createElement('button');
+        // change the button text to the respective pokemon name
+        button.innerText = pokemon.name;
+        // add the class 'list-button' to the button
+        button.classList.add('list-button');
+        // append the button to the list item, and then the list item to the list
+        listItem.appendChild(button);
+        listContainer.appendChild(listItem);
+        // add an event handler that calls the function showDetails(pokemon)
+        button.addEventListener('click', function () {
+            showDetails(pokemon);
+        });
     }
  
+    // define separate function showDetails() that prints the received pokemon object to the console
+    function showDetails(pokemon) {
+        console.log(pokemon);
+    }
+
     // return object with the new public functions assigned as keys
     return {
         getAll: getAll,
         add: add,
-        findPokemon: findPokemon
+        addListItem: addListItem
     }
 })()
 
-// define threshold for pokemon height (specifically chosen so that only one pokemon reaches the threshold)
-let heightBig = 0.7;
-
 // forEach loop to iterate over each pokemon in pokemonList
 pokemonRepository.getAll().forEach( function(pokemon) {
-    // if height of pokemon is equal to or greater than the height threshold, label pokemon as 'Wow, that's big'
-    if (pokemon.height >= heightBig) {
-        document.write(`<li>${pokemon.name} (height: ${pokemon.height}m) - Wow, that's big!</li>`);
-    } else {
-        document.write(`<li>${pokemon.name} (height: ${pokemon.height}m)</li>`);
-    }
+    pokemonRepository.addListItem(pokemon);
 });

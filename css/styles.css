@@ -4,6 +4,7 @@
     --primary-color: #21b7a1;
     --header-background-color1: yellow;
     --header-background-color2: orange;
+    --button-background-color: rgba(222, 222, 222, 0.1);
 
     /* other properties */
     --font-weight-h: 700;
@@ -31,4 +32,19 @@ h1 {
 
 .page-header {
     background: linear-gradient(90deg, var(--header-background-color1), var(--header-background-color2));
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 4px;
+}
+
+.list-button {
+    width: calc(100% - 8px);
+    background-color: var(--button-background-color);
+    border-radius: 5px;
+    margin: 4px;
+    padding: 20px;
+    text-align: left;
 }
