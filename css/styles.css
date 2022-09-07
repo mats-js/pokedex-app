@@ -32,12 +32,15 @@ h1 {
 
 .page-header {
     background: linear-gradient(90deg, var(--header-background-color1), var(--header-background-color2));
+    position: fixed;
+    width: 100%;
+    top: 0;
 }
 
 ul {
     list-style-type: none;
     padding: 0;
-    margin: 4px;
+    margin: 52px 4px 4px 4px;
 }
 
 .list-button {
@@ -47,4 +50,8 @@ ul {
     margin: 4px;
     padding: 20px;
     text-align: left;
+}
+
+.invisible {
+    display: none;
 }

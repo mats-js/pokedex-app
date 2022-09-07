@@ -3,6 +3,15 @@ let pokemonRepository = (function() {
     // define an empty list of pokemon in the array pokemonList and the URL for the API in apiUrl
     let pokemonList = [];
     let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
+    let loadingMessage = document.querySelector('#loading-text'); // define the DOM node that includes the loading message (Bonus Task)
+
+    // define two separate functions to show and hide a loading message in the header (Bonus Task)
+    function showLoadingMessage() {
+        loadingMessage.classList.remove('invisible');
+    }
+    function hideLoadingMessage() {
+        loadingMessage.classList.add('invisible');
+    }
 
     // define separate function getAll()
     function getAll() {
@@ -45,7 +54,9 @@ let pokemonRepository = (function() {
 
     // define separate function loadList() that fetches the list of pokemon from the pokeapi
     function loadList() {
+        showLoadingMessage(); // Show a loading message in the header (Bonus Task)
         return fetch(apiUrl).then(function (response) {
+            hideLoadingMessage(); // Hide the loading message in the header (Bonus Task)
             return response.json(); // return a promise with the json() function
         }).then(function (json) {
             /* for each result from the fetched json, the result/pokemon is added 
@@ -58,14 +69,17 @@ let pokemonRepository = (function() {
                 add(pokemon);
             });
         }).catch(function (e) {
+            hideLoadingMessage(); // Hide the loading message in the header (Bonus Task)
             console.error(e);
         })
     }
 
     // define separate function loadDetails() that loads details for the selected pokemon
     function loadDetails(item) {
+        showLoadingMessage(); // Show a loading message in the header (Bonus Task)
         let url = item.detailsUrl;
         return fetch(url).then(function (response) {
+            hideLoadingMessage(); // Hide the loading message in the header (Bonus Task)
             return response.json();
         }).then(function (details) {
             // Now we add the details to the item
@@ -73,6 +87,7 @@ let pokemonRepository = (function() {
             item.height = details.height;
             item.types = details.types;
         }).catch(function (e) {
+            hideLoadingMessage(); // Hide the loading message in the header (Bonus Task)
             console.error(e);
         });
     }
