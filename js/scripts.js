@@ -1,11 +1,8 @@
 // create a new variable pokemonRepository and assign the IIFE to it
 let pokemonRepository = (function() {
-    // define a list of pokemon in the array pokemonList
-    let pokemonList = [
-        { name: 'Bulbasaur', height: 0.7, types: ['grass', 'poison']},
-        { name: 'Charmander', height: 0.6, types: ['fire']},
-        { name: 'Squirtle', height: 0.5, types: ['water']}
-    ];
+    // define an empty list of pokemon in the array pokemonList and the URL for the API in apiUrl
+    let pokemonList = [];
+    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
     // define separate function getAll()
     function getAll() {
@@ -18,8 +15,8 @@ let pokemonRepository = (function() {
         if (typeof item !== 'object') {
             alert('New pokemon must be entered as an object');
         // check if item keys are equal to the specific keys expected
-        } else if (!('name' in item) || !('height' in item) || !('types' in item)) {
-            alert('New pokemon must be entered with item keys name, height, and types');
+        } else if (!('name' in item) || !('detailsUrl' in item)) {
+            alert('New pokemon must be entered with item keys name and detailsUrl');
         // else, add item to pokemonList
         } else {
             pokemonList.push(item);
@@ -45,21 +42,62 @@ let pokemonRepository = (function() {
             showDetails(pokemon);
         });
     }
- 
-    // define separate function showDetails() that prints the received pokemon object to the console
+
+    // define separate function loadList() that fetches the list of pokemon from the pokeapi
+    function loadList() {
+        return fetch(apiUrl).then(function (response) {
+            return response.json(); // return a promise with the json() function
+        }).then(function (json) {
+            /* for each result from the fetched json, the result/pokemon is added 
+               to pokemonList with the already implemented add function */
+            json.results.forEach(function (item) {
+                let pokemon = {
+                name: item.name,
+                detailsUrl: item.url
+                };
+                add(pokemon);
+            });
+        }).catch(function (e) {
+            console.error(e);
+        })
+    }
+
+    // define separate function loadDetails() that loads details for the selected pokemon
+    function loadDetails(item) {
+        let url = item.detailsUrl;
+        return fetch(url).then(function (response) {
+            return response.json();
+        }).then(function (details) {
+            // Now we add the details to the item
+            item.imageUrl = details.sprites.front_default;
+            item.height = details.height;
+            item.types = details.types;
+        }).catch(function (e) {
+            console.error(e);
+        });
+    }
+
+    // define separate function showDetails() that prints the received pokemon details to the console
     function showDetails(pokemon) {
-        console.log(pokemon);
+        loadDetails(pokemon).then(function () {
+            console.log(pokemon);
+        });
     }
 
     // return object with the new public functions assigned as keys
     return {
         getAll: getAll,
         add: add,
-        addListItem: addListItem
-    }
-})()
+        addListItem: addListItem,
+        loadList: loadList,
+        loadDetails: loadDetails,
+        showDetails: showDetails
+    };
+})();
 
-// forEach loop to iterate over each pokemon in pokemonList
-pokemonRepository.getAll().forEach( function(pokemon) {
-    pokemonRepository.addListItem(pokemon);
+pokemonRepository.loadList().then(function() {
+    // now the data is loaded
+    pokemonRepository.getAll().forEach(function(pokemon){
+          pokemonRepository.addListItem(pokemon);
+    });
 });
