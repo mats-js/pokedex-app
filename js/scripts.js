@@ -72,7 +72,10 @@ let pokemonRepository = (function() {
             // Now we add the details to the item
             item.imageUrl = details.sprites.front_default;
             item.height = details.height;
-            item.types = details.types;
+            item.types = [];
+            for (var i = 0; i < details.types.length; i++) {
+                item.types.push(details.types[i].type.name);
+            }
         }).catch(function (e) {
             console.error(e);
         });
@@ -81,8 +84,33 @@ let pokemonRepository = (function() {
     // define separate function showDetails() that prints the received pokemon details to the console
     function showDetails(pokemon) {
         loadDetails(pokemon).then(function () {
-            pokemonModal.showModal(pokemon.name, `Height: ${pokemon.height}`, pokemon.imageUrl);
+            showModal(pokemon);
         });
+    }
+
+    function showModal(item) {  
+        // define modal body, title, and header
+        let modalBody = $('.modal-body');
+        let modalTitle = $('.modal-title');
+        let modalHeader = $('.modal-header');
+
+        // clear existing modal title and body
+        modalTitle.empty();
+        modalBody.empty();
+        modalHeader.empty();
+
+        // create elements for pokemon name, img, height, and types
+        let nameElement = $(`<h1>${item.name}</h1>`);
+        let imageElement = $('<img class="modal-img" />');
+        imageElement.attr('src', item.imageUrl);
+        let heightElement = $(`<p>Height: ${item.height}</p>`);
+        let typesElement = $(`<p>Types: ${item.types}</p>`);
+
+        // append pokemon elements to modal
+        modalTitle.append(nameElement);
+        modalBody.append(imageElement);
+        modalBody.append(heightElement);
+        modalBody.append(typesElement);
     }
 
     // return object with the new public functions assigned as keys
@@ -92,70 +120,9 @@ let pokemonRepository = (function() {
         addListItem: addListItem,
         loadList: loadList,
         loadDetails: loadDetails,
-        showDetails: showDetails
-    };
-})();
-
-// MODAL FUNCTIONALITY //
-// create a new IIFE for the modal functions
-let pokemonModal = (function() {
-    let modalContainer = document.querySelector('#modal-container');
-  
-    function showModal(title, text, url) {  
-        // Clear all existing modal content
-        modalContainer.innerHTML = '';
-        
-        let modal = document.createElement('div');
-        modal.classList.add('modal');
-        
-        // Add the new modal content
-        let closeButtonElement = document.createElement('button');
-        closeButtonElement.classList.add('modal-close');
-        closeButtonElement.innerText = 'Close';
-        closeButtonElement.addEventListener('click', hideModal);
-        
-        let titleElement = document.createElement('h1');
-        titleElement.innerText = title;
-        
-        let contentElement = document.createElement('p');
-        contentElement.innerText = text;
-
-        let imageElement = document.createElement('img');
-        imageElement.src = url;
-        
-        modal.appendChild(closeButtonElement);
-        modal.appendChild(titleElement);
-        modal.appendChild(contentElement);
-        modal.appendChild(imageElement);
-        modalContainer.appendChild(modal);
-        
-        modalContainer.classList.add('is-visible');
-    }
-    
-    function hideModal() {
-        modalContainer.classList.remove('is-visible');
-    }
-    
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
-            hideModal();
-        }
-    });
-  
-    modalContainer.addEventListener('click', (e) => {
-        // Since this is also triggered when clicking INSIDE the modal
-        // We only want to close if the user clicks directly on the overlay
-        let target = e.target;
-        if (target === modalContainer) {
-            hideModal();
-        }
-    });
-    
-    // return object with the new public functions assigned as keys
-    return {
+        showDetails: showDetails,
         showModal: showModal
     };
-
 })();
 
 // load the pokemonRepository
