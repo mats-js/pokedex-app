@@ -27,28 +27,24 @@ let pokemonRepository = (function() {
     // define separate function addListItem()
     function addListItem(pokemon) {
         // assign the overall list of pokemon to a new variable
-        let listContainer = document.querySelector('.pokemon-list');
+        let listContainer = $('.list-group');
         // create a new list entry and button for the pokemon
-        let listItem = document.createElement('li');
-        let button = document.createElement('button');
-        // change the button text to the respective pokemon name
-        button.innerText = pokemon.name;
+        let listItem = $('<li class="list-group-item"></li>');
+        let button = $(`<button type="button" class="btn list-group-item list-group-item-action list-group-item-light" data-toggle="modal" data-target="#exampleModal">${pokemon.name}</button>`);
         // add the class 'list-button' to the button
-        button.classList.add('list-button');
+        button.addClass('list-button');
         // append the button to the list item, and then the list item to the list
-        listItem.appendChild(button);
-        listContainer.appendChild(listItem);
+        listItem.append(button);
+        listContainer.append(listItem);
         // add an event handler that calls the function showDetails(pokemon)
-        button.addEventListener('click', function () {
+        button.on('click', function () {
             showDetails(pokemon);
         });
     }
 
     // define separate function loadList() that fetches the list of pokemon from the pokeapi
     function loadList() {
-        return fetch(apiUrl).then(function (response) {
-            return response.json(); // return a promise with the json() function
-        }).then(function (json) {
+        return $.ajax(apiUrl).then(function (json) {
             /* for each result from the fetched json, the result/pokemon is added 
                to pokemonList with the already implemented add function */
             json.results.forEach(function (item) {
@@ -66,9 +62,7 @@ let pokemonRepository = (function() {
     // define separate function loadDetails() that loads details for the selected pokemon
     function loadDetails(item) {
         let url = item.detailsUrl;
-        return fetch(url).then(function (response) {
-            return response.json();
-        }).then(function (details) {
+        return $.ajax(url).then(function (details) {
             // Now we add the details to the item
             item.imageUrl = details.sprites.front_default;
             item.height = details.height;
@@ -92,12 +86,10 @@ let pokemonRepository = (function() {
         // define modal body, title, and header
         let modalBody = $('.modal-body');
         let modalTitle = $('.modal-title');
-        let modalHeader = $('.modal-header');
 
         // clear existing modal title and body
         modalTitle.empty();
         modalBody.empty();
-        modalHeader.empty();
 
         // create elements for pokemon name, img, height, and types
         let nameElement = $(`<h1>${item.name}</h1>`);
